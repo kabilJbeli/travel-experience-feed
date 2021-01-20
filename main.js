@@ -169,8 +169,14 @@ function displayPublications(){
         title.innerText=item.title;
         let heart = document.createElement("i");
         heart.classList="fa fa-heart";
-        heart.setAttribute("data-item",JSON.stringify(item));
+        let commentIcon =document.createElement("i");
+        commentIcon.classList="fa fa-comment";
 
+        heart.setAttribute("data-item",JSON.stringify(item));
+        let removeIcon=document.createElement("i");
+        removeIcon.setAttribute("data-item",JSON.stringify(item));
+        removeIcon.classList=" removeBtn fa fa-times";
+        heart.innerText=" Like";
         heart.setAttribute("aria-hidden","true")
         if(item.liked){
             heart.style="color:red;";
@@ -191,15 +197,30 @@ function displayPublications(){
         img.src=item;
         images.append(img);
      });
+        const actions= document.createElement("div");
+        actions.setAttribute("class","actions");
+        const actionLike= document.createElement("div");
+        actionLike.setAttribute("class","action");
+
+        actionLike.append(heart);
+        actions.append(actionLike);
+        const comment = document.createElement("div");
+        comment.setAttribute("class","action");
+        commentIcon.innerText="  Comments";
+        comment.append(commentIcon);
+        actions.append(comment);
         wrapper.classList="title-wrapper";
+        feedItem.append(removeIcon);
         wrapper.append(userWrapper);
         wrapper.append(budgets);
         feedItem.append(wrapper);
         feedItem.append(description);
         feedItem.append(images);
+        feedItem.append(actions);
         feed.append(feedItem);
     });
     eventListener();
+    eventClickListener();
 }
 function eventListener(){
 var el = document.querySelectorAll(".fa-heart");
@@ -221,16 +242,29 @@ for (i = 0; i < el.length; ++i) {
        localStorage.setItem("publication",JSON.stringify(publications));
       }, false);
 }}
-function eventClickListener(){
+function eventClickListener() {
     var el = document.querySelectorAll(".addItem");
     var ct = document.querySelector(".w-mind");
 
     for (i = 0; i < el.length; ++i) {
 
-    el[i].addEventListener("click",  (event) => {
-        title.value=  ct.value;
+        el[i].addEventListener("click", (event) => {
+            title.value = ct.value;
         }, false);
-    }}
+    }
+    const close = document.querySelectorAll(".removeBtn");
+    for (i = 0; i < close.length; ++i) {
+
+        close[i].addEventListener("click", (event) => {
+            let pub=  JSON.parse(event.target.getAttribute('data-item'));
+            publications.splice(pub, 1);
+            localStorage.setItem("publication",JSON.stringify(publications));
+displayPublications();
+        }, false);
+    }
+
+
+}
 
 
 eventClickListener();
