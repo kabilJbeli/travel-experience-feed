@@ -242,24 +242,32 @@ for (i = 0; i < el.length; ++i) {
        localStorage.setItem("publication",JSON.stringify(publications));
       }, false);
 }}
+
+function getArrayByID(){
+    return publications.map(item=>{
+        return item.id;
+
+    });
+}
 function eventClickListener() {
     var el = document.querySelectorAll(".addItem");
     var ct = document.querySelector(".w-mind");
 
     for (i = 0; i < el.length; ++i) {
-
         el[i].addEventListener("click", (event) => {
             title.value = ct.value;
         }, false);
     }
     const close = document.querySelectorAll(".removeBtn");
     for (i = 0; i < close.length; ++i) {
-
         close[i].addEventListener("click", (event) => {
             let pub=  JSON.parse(event.target.getAttribute('data-item'));
-            publications.splice(pub, 1);
+            const IdArray = getArrayByID();
+            if(IdArray.indexOf(pub.id)>-1){
+                publications.splice(IdArray.indexOf(pub.id),1);
+            }
             localStorage.setItem("publication",JSON.stringify(publications));
-displayPublications();
+            displayPublications();
         }, false);
     }
 
